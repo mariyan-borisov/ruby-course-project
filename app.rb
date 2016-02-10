@@ -9,6 +9,39 @@ get '/' do
   haml :index
 end
 
+get '/logout/' do
+  session.delete :user_name
+  redirect to('/')
+end
+
+get '/login/' do
+  unless session[:user_name].nil?
+    return redirect to('/')
+  end
+  haml :login
+end
+
+post '/login/' do
+  unless session[:user_name].nil?
+    return redirect to('/')
+  end
+  
+  user = User.find_by_user_name(params[:user_name])
+
+  if user.nil?
+    @error = "No such user..."
+    return haml :login
+  end
+
+  if BCrypt::Password.new(user.password_hash) != params[:password]
+    @error = "Wrong password..."
+    haml :login
+  else
+    session[:user_name] = user.user_name
+    redirect to('/')
+  end
+end
+
 get '/registration/' do
   haml :registration
 end
