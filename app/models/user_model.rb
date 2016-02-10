@@ -6,7 +6,7 @@ class User < ActiveRecord::Base
   validates_uniqueness_of :user_name
   validates_presence_of :user_name
   validates_format_of :user_name, with: USER_VALID_EXPRESSION
-  
+
   def self.user_name_valid?(user_name)
     !user_name.nil? and !user_name.match(USER_VALID_EXPRESSION).nil?
   end

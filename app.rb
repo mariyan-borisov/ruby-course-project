@@ -25,7 +25,7 @@ post '/login/' do
   unless session[:user_name].nil?
     return redirect to('/')
   end
-  
+
   user = User.find_by_user_name(params[:user_name])
 
   if user.nil?
