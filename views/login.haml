@@ -1,0 +1,14 @@
+!!!
+%html
+  %head
+    %title Registration
+  %body
+    %form{"method" => "post", "action" => "/registration/"}
+      %input{"type" => "text", "name" => "user_name"}
+      %input{"type" => "password", "name" => "first_password"}
+      %input{"type" => "password", "name" => "second_password"}
+      %input{"type" => "submit"}
+      - if !@errors.nil? and !@errors.empty?
+        %ul
+        - @errors.each do |error|
+          %li= error

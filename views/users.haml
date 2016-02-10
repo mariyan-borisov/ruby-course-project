@@ -1,0 +1,8 @@
+!!!
+%html
+  %head
+    %title Users
+  %body
+    %ul
+      - @users.each do |entry|
+        %li= entry.user_name + ", Rank: " + (entry.is_admin ? "Admin" : "User")
