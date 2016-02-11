@@ -3,7 +3,7 @@ class Article < ActiveRecord::Migration
     create_table :articles do |t|
       t.string :title
       t.text :content
-      t.time :time
+      t.datetime :time
       t.integer :category_id
       t.integer :user_id
     end

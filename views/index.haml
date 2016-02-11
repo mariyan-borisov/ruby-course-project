@@ -4,8 +4,21 @@
     %title Index
   %body
     %div
+      - if @user.nil?
+        %a{"href" => "/login/"} Login
+        %a{"href" => "/registration/"} Registration
+      - else
+        User:
+        = @user.user_name
+        %a{"href" => "/logout/"} Logout
+        %a{"href" => "/create_article/"} New Article
       %a{"href" => "/users/"} Users
-      %a{"href" => "/login/"} Login
-      %a{"href" => "/logout/"} Logout
-      %a{"href" => "/registration/"} Registration
-      %a{"href" => "/create_article/"} New Article
+      %a{"href" => "/categories/"} Categories###
+    %div.article
+      - @articles.each do |article|
+        %div= "Title: " + article.title
+        %div= "Author: " + article.user.user_name
+        %div= "Created: " + article.time.to_s
+        %div= "Category: " + (article.category.nil? ? "None" : article.category.name)
+        %div= "Content: " + article.content
+        %hr
