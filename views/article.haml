@@ -6,4 +6,14 @@
     - if @article.nil?
       %div The article you're looking for doesn't exist...
     - else
-      %div "Articleeeeeeeeeeeee"
+      %div
+        Title:
+        = @article.title
+        Content:
+        = @article.content
+        Time:
+        = @article.time.to_s
+        CategoryID:
+        = @article.category_id
+        UserID:
+        = @article.user_id

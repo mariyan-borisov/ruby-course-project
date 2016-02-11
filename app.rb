@@ -68,7 +68,21 @@ get '/create_article/' do
 end
 
 post '/create_article/' do
+  if session[:user_name].nil?
+    "Get off 'muh lawn..."
+  end
 
+  user = User.find_by_user_name(session[:user_name])
+
+  Article.create({
+    title: params[:title],
+    content: params[:content],
+    time: Time.now,
+    category_id: params[:category],
+    user_id: user.id
+  })
+
+  redirect to('/')
 end
 
 get '/article/:article_id' do

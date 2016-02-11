@@ -9,7 +9,8 @@
       Content
       %textarea{"name" => "content"}
       %select{"name" => "category"}
-        %option{"value" => "1"} All
+        - @categories.each do |category|
+          %option{"value" => category.id}= category.name
       %input{"type" => "submit"}
       - if !@errors.nil?
         %div= @errors
