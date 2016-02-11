@@ -8,6 +8,10 @@ require './app/models/category_model'
 enable :sessions
 
 get '/' do
+  unless session[:user_name].nil?
+    @user = User.find_by_user_name(session[:user_name])
+  end
+  @articles = Article.all.to_a
   haml :index
 end
 
@@ -155,7 +159,7 @@ post '/registration/' do
 
   User.register(params[:user_name], params[:first_password], is_admin)
 
-  redirect to('/users/')
+  redirect to('/')
 end
 
 get '/users/' do

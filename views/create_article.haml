@@ -8,9 +8,10 @@
       %input{"type" => "text", "name" => "title"}
       Content
       %textarea{"name" => "content"}
+      Category
       %select{"name" => "category"}
         - @categories.each do |category|
           %option{"value" => category.id}= category.name
-      %input{"type" => "submit"}
+      %input{"type" => "submit", "value" => "Post"}
       - if !@errors.nil?
         %div= @errors

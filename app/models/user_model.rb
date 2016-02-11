@@ -22,7 +22,7 @@ class User < ActiveRecord::Base
     user = new
     user.user_name = user_name
     user.password_hash = BCrypt::Password.create(password)
-    user.registration_time = Time.now
+    user.time = Time.now
     user.is_admin = is_admin
     user.save
   end
