@@ -40,8 +40,8 @@ get '/categories/' do
     return "Get off 'muh lawn..."
   end
 
-  user = User.find_by_user_name(session[:user_name])
-  unless user.is_admin
+  @user = User.find_by_user_name(session[:user_name])
+  unless @user.is_admin
     return "Get off 'muh lawn..."
   end
 
@@ -55,8 +55,8 @@ post '/categories/' do
     return "Get off 'muh lawn..."
   end
 
-  user = User.find_by_user_name(session[:user_name])
-  unless user.is_admin
+  @user = User.find_by_user_name(session[:user_name])
+  unless @user.is_admin
     return "Get off 'muh lawn..."
   end
 
@@ -87,7 +87,11 @@ post '/delete_category/' do
 end
 
 get '/create_article/' do
+  unless session[:user_name].nil?
+    @user = User.find_by_user_name(session[:user_name])
+  end
   @categories = Category.all.to_a
+
   haml :create_article
 end
 
@@ -115,6 +119,12 @@ get '/article/:article_id' do
   rescue
     @article = nil
   end
+
+  unless session[:user_name].nil?
+    @user = User.find_by_user_name(session[:user_name])
+  end
+  @categories = Category.all.to_a
+
   haml :article
 end
 
@@ -127,6 +137,9 @@ get '/login/' do
   unless session[:user_name].nil?
     return redirect to('/')
   end
+
+  @categories = Category.all.to_a
+
   haml :login
 end
 
@@ -152,6 +165,8 @@ post '/login/' do
 end
 
 get '/registration/' do
+  @categories = Category.all.to_a
+
   haml :registration
 end
 
@@ -183,7 +198,13 @@ post '/registration/' do
 end
 
 get '/users/' do
+  unless session[:user_name].nil?
+    @user = User.find_by_user_name(session[:user_name])
+  end
+  @categories = Category.all.to_a
+
   @users = User.all.to_a
+
   haml :users
 end
 
