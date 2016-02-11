@@ -2,23 +2,44 @@
 %html
   %head
     %title Index
+    %link{"rel" => "stylesheet", "href" => "/style.css"}
   %body
-    %div
-      - if @user.nil?
-        %a{"href" => "/login/"} Login
-        %a{"href" => "/registration/"} Registration
-      - else
-        User:
-        = @user.user_name
-        %a{"href" => "/logout/"} Logout
-        %a{"href" => "/create_article/"} New Article
-      %a{"href" => "/users/"} Users
-      %a{"href" => "/categories/"} Categories###
-    %div.article
+    %div#top
+      %div#nav
+        %a{"href" => "/"} Index
+        - unless @user.nil?
+          %a{"href" => "/create_article/"} Create Article
+        %a{"href" => "/users/"} Users
+        - if !@user.nil? and @user.is_admin
+          %a{"href" => "/categories/"} Categories
+      %div#user
+        - if @user.nil?
+          %a{"href" => "/login/"} Login
+          %a{"href" => "/registration/"} Registration
+        - else
+          User:
+          %a{"href" => "/user/" + @user.user_name}= @user.user_name
+          |
+          %a{"href" => "/logout/"} Logout
+      %div.clear
+      %div#search
+        %form{"method" => "get", "action" => "/search/"}
+          %input{"name" => "query"}
+          %select{"name" => "category"}
+            %option{"value" => "all"} All
+            - @categories.each do |category|
+              %option{"value" => category.id}= category.name
+          %input{"type" => "submit", "value" => "Search"}
+    %div#main
       - @articles.each do |article|
-        %div= "Title: " + article.title
-        %div= "Author: " + article.user.user_name
-        %div= "Created: " + article.time.to_s
-        %div= "Category: " + (article.category.nil? ? "None" : article.category.name)
-        %div= "Content: " + article.content
-        %hr
+        %div.article
+          %div
+            Title:
+            %a{"href" => "/article/" + article.id.to_s}= article.title
+          %div
+            Author:
+            %a{"href" => "/user/" + article.user.user_name}= article.user.user_name
+          %div= "Created: " + article.time.to_s
+          %div= "Category: " + (article.category.nil? ? "None" : article.category.name)
+          %div= "Content: " + article.content
+          %hr
