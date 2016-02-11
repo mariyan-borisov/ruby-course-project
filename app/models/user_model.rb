@@ -3,9 +3,12 @@ require 'sinatra/activerecord'
 
 class User < ActiveRecord::Base
   USER_VALID_EXPRESSION = /\A[a-zA-Z0-9_-]+\Z/
+
   validates_uniqueness_of :user_name
   validates_presence_of :user_name
   validates_format_of :user_name, with: USER_VALID_EXPRESSION
+
+  has_many :articles
 
   def self.user_name_valid?(user_name)
     !user_name.nil? and !user_name.match(USER_VALID_EXPRESSION).nil?

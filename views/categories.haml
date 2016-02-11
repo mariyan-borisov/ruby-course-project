@@ -1,0 +1,14 @@
+!!!
+%html
+  %head
+    %title Categories
+  %body
+    %form{"method" => "post", "action" => "/delete_category/"}
+      %select{"name" => "category"}
+        - @categories.each do |category|
+          %option{"value" => category.id}= category.name
+      %input{"type" => "submit", "value" => "Delete"}
+    %form{"method" => "post", "action" => "/categories/"}
+      Name
+      %input{"type" => "text", "name" => "name"}
+      %input{"type" => "submit", "value" => "Add"}
