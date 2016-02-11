@@ -1,0 +1,15 @@
+!!!
+%html
+  %head
+    %title Create Article
+  %body
+    %form{"method" => "post", "action" => "/create_article/"}
+      Title
+      %input{"type" => "text", "name" => "title"}
+      Content
+      %textarea{"name" => "content"}
+      %select{"name" => "category"}
+        %option{"value" => "1"} All
+      %input{"type" => "submit"}
+      - if !@errors.nil?
+        %div= @errors
