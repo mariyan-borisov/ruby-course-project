@@ -2,9 +2,9 @@ require 'sinatra'
 require 'sinatra/activerecord'
 require 'tilt/haml'
 require 'rack/utils'
-require './app/models/user_model'
-require './app/models/article_model'
-require './app/models/category_model'
+require_relative 'app/models/user_model'
+require_relative 'app/models/article_model'
+require_relative 'app/models/category_model'
 
 enable :sessions
 
