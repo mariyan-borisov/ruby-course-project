@@ -1,6 +1,7 @@
 require 'sinatra'
 require 'sinatra/activerecord'
 require 'tilt/haml'
+require 'rack/utils'
 require './app/models/user_model'
 require './app/models/article_model'
 require './app/models/category_model'
@@ -11,8 +12,27 @@ get '/' do
   unless session[:user_name].nil?
     @user = User.find_by_user_name(session[:user_name])
   end
+
+  @categories = Category.all.to_a
   @articles = Article.all.to_a
+
   haml :index
+end
+
+post '/toggle_rank/' do
+  if session[:user_name].nil?
+    return "Get off 'muh lawn..."
+  end
+
+  user = User.find_by_user_name(session[:user_name])
+  unless user.is_admin
+    return "Get off 'muh lawn..."
+  end
+
+  user = User.find(params[:user])
+  user.update({is_admin: !user.is_admin})
+
+  redirect to("/user/#{user.user_name}")
 end
 
 get '/categories/' do
@@ -40,7 +60,7 @@ post '/categories/' do
     return "Get off 'muh lawn..."
   end
 
-  Category.create({name: params[:name]})
+  Category.create({name: Rack::Utils.escape_html(params[:name])})
 
   @categories = Category.all.to_a
 
@@ -79,8 +99,8 @@ post '/create_article/' do
   user = User.find_by_user_name(session[:user_name])
 
   Article.create({
-    title: params[:title],
-    content: params[:content],
+    title: Rack::Utils.escape_html(params[:title]),
+    content: Rack::Utils.escape_html(params[:content]),
     time: Time.now,
     category_id: params[:category],
     user_id: user.id
@@ -167,6 +187,14 @@ get '/users/' do
   haml :users
 end
 
-get '/users/:user_id' do
-  "UID: #{params[:user_id]}"
+get '/user/:user_name' do
+  unless session[:user_name].nil?
+    @user = User.find_by_user_name(session[:user_name])
+  end
+
+  @categories = Category.all.to_a
+  @viewed_user = User.find_by_user_name(params[:user_name])
+  @articles = Article.where({user_id: @viewed_user.id}).all.to_a
+
+  haml :user
 end

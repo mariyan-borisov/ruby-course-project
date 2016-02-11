@@ -1,0 +1,49 @@
+!!!
+%html
+  %head
+    %title Profile
+  %body
+    %div
+      - if @user.nil?
+        %a{"href" => "/login/"} Login
+        %a{"href" => "/registration/"} Registration
+      - else
+        User:
+        = @user.user_name
+        %a{"href" => "/logout/"} Logout
+        %a{"href" => "/create_article/"} New Article
+      %a{"href" => "/"} Index
+      %a{"href" => "/users/"} Users
+      - if !@user.nil? and @user.is_admin
+        %a{"href" => "/categories/"} Categories
+      %form{"method" => "get", "action" => "/search/"}
+        %input{"name" => "query"}
+        %select{"name" => "category"}
+          %option{"value" => "all"} All
+          - @categories.each do |category|
+            %option{"value" => category.id}= category.name
+        %input{"type" => "submit", "value" => "Search"}
+      %div
+        User Name:
+        = @viewed_user.user_name
+        Rank:
+        = @viewed_user.is_admin ? "Admin" : "User"
+        Registration Time:
+        = @viewed_user.time.to_s
+        - if @user.is_admin
+          %form{"method" => "post", "action" => "/toggle_rank/"}
+            %input{"type" => "hidden", "name" => "user", "value" => @viewed_user.id}
+            %input{"type" => "submit", "value" => (@viewed_user.is_admin ? "Demote" : "Promote")}
+        Articles:
+        - @articles.each do |article|
+          %div.article
+            %div.title
+              Title:
+              %a{"href" => "/article/" + article.id.to_s}= article.title
+            %div.author
+              Author:
+              %a{"href" => "/user/" + article.user.user_name}= article.user.user_name
+            %div= "Created: " + article.time.to_s
+            %div= "Category: " + (article.category.nil? ? "None" : article.category.name)
+            %div= "Content: " + article.content
+            %hr

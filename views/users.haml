@@ -5,4 +5,5 @@
   %body
     %ul
       - @users.each do |entry|
-        %li= entry.user_name + ", Rank: " + (entry.is_admin ? "Admin" : "User")
+        %li
+          %a{"href" => "/user/" + entry.user_name}= entry.user_name + ", Rank: " + (entry.is_admin ? "Admin" : "User")
