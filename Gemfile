@@ -1,0 +1,6 @@
+gem 'activerecord'
+gem 'bcrypt'
+gem 'haml'
+gem 'sinatra'
+gem 'sinatra-activerecord'
+gem 'sqlite3'
