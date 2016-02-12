@@ -26,7 +26,7 @@ get '/search/' do
   end
   @categories = Category.all.to_a
 
-  @query = params[:query]
+  @query = Rack::Utils.escape_html(params[:query])
   @category = params[:category]
 
   if params[:category] == "all"
