@@ -15,7 +15,7 @@ get '/' do
   end
 
   @categories = Category.all.to_a
-  @articles = Article.all.to_a
+  @articles = Article.order(time: :desc).to_a
 
   haml :index
 end
@@ -34,14 +34,14 @@ get '/search/' do
       "title LIKE ? OR content LIKE ?",
       "%#{@query}%",
       "%#{@query}%",
-    ).to_a
+    ).order(time: :desc).to_a
   else
     @articles = Article.where(
       "(title LIKE ? OR content LIKE ?) AND category_id = ?",
       "%#{@query}%",
       "%#{@query}%",
       @category
-    ).to_a
+    ).order(time: :desc).to_a
   end
 
   haml :search
@@ -243,7 +243,7 @@ get '/user/:user_name' do
 
   @categories = Category.all.to_a
   @viewed_user = User.find_by_user_name(params[:user_name])
-  @articles = Article.where({user_id: @viewed_user.id}).all.to_a
+  @articles = Article.where({user_id: @viewed_user.id}).order(time: :desc).to_a
 
   haml :user
 end
