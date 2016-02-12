@@ -234,7 +234,7 @@ get '/article/:article_id' do
     @user = User.find_by_user_name(session[:user_name])
   end
   @categories = Category.all.to_a
-  @comments = Comment.order(time: :desc).to_a
+  @comments = Comment.where({article_id: @article.id}).order(time: :desc).to_a
 
   haml :article
 end
