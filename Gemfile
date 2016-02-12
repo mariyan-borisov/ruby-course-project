@@ -1,6 +1,7 @@
 gem 'activerecord'
 gem 'bcrypt'
 gem 'haml'
+gem 'maruku'
 gem 'sinatra'
 gem 'sinatra-activerecord'
 gem 'sqlite3'

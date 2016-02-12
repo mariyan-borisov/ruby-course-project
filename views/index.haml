@@ -41,5 +41,5 @@
             %a{"href" => "/user/" + article.user.user_name}= article.user.user_name
           %div= "Created: " + article.time.to_s
           %div= "Category: " + (article.category.nil? ? "None" : article.category.name)
-          %div= "Content: " + article.content
+          %div= "Content: " + Maruku.new(article.content).to_html
           %hr
