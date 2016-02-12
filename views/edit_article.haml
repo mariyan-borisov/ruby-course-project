@@ -1,0 +1,49 @@
+!!!
+%html
+  %head
+    %title Edit Article
+    %link{"rel" => "stylesheet", "href" => "/style.css"}
+  %body
+    %div#top
+      %div#nav
+        %a{"href" => "/"} Index
+        - unless @user.nil?
+          %a{"href" => "/create_article/"} Create Article
+        %a{"href" => "/users/"} Users
+        - if !@user.nil? and @user.is_admin
+          %a{"href" => "/categories/"} Categories
+      %div#user
+        - if @user.nil?
+          %a{"href" => "/login/"} Login
+          %a{"href" => "/registration/"} Registration
+        - else
+          User:
+          %a{"href" => "/user/" + @user.user_name}= @user.user_name
+          |
+          %a{"href" => "/logout/"} Logout
+      %div.clear
+      %div#search
+        %form{"method" => "get", "action" => "/search/"}
+          %input{"name" => "query"}
+          %select{"name" => "category"}
+            %option{"value" => "all"} All
+            - @categories.each do |category|
+              %option{"value" => category.id}= category.name
+          %input{"type" => "submit", "value" => "Search"}
+    %div#main
+      %form{"method" => "post", "action" => "/edit_article/"}
+        %input{"type" => "hidden", "name" => "article_id", "value" => @article.id.to_s}
+        Title
+        %input{"type" => "text", "name" => "title", "value" => @article.title}
+        Content
+        %textarea{"name" => "content"}= @article.content
+        Category
+        %select{"name" => "category"}
+          - @categories.each do |category|
+            - if category.id == @article.category_id
+              %option{"value" => category.id, "selected" => "selected"}= category.name
+            - else
+              %option{"value" => category.id}= category.name
+        %input{"type" => "submit", "value" => "Save"}
+        - if !@errors.nil?
+          %div= @errors
