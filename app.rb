@@ -6,6 +6,7 @@ require 'maruku'
 require_relative 'models/user'
 require_relative 'models/article'
 require_relative 'models/category'
+require_relative 'models/comment'
 
 enable :sessions
 
@@ -18,6 +19,25 @@ get '/' do
   @articles = Article.order(time: :desc).to_a
 
   haml :index
+end
+
+post '/post_comment/' do
+  if session[:user_name].nil?
+    return "Get off 'muh lawn..."
+  end
+
+  user = User.find_by_user_name(session[:user_name])
+
+  if params[:content] != nil and params[:content] != ""
+    Comment.create({
+      content: Rack::Utils.escape_html(params[:content]),
+      time: Time.now,
+      article_id: params[:article_id],
+      user_id: user.id
+    })
+  end
+
+  redirect to("/article/#{params[:article_id]}")
 end
 
 get '/search/' do
@@ -214,6 +234,7 @@ get '/article/:article_id' do
     @user = User.find_by_user_name(session[:user_name])
   end
   @categories = Category.all.to_a
+  @comments = Comment.order(time: :desc).to_a
 
   haml :article
 end
