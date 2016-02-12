@@ -128,12 +128,52 @@ post '/delete_article/' do
   end
 
   if user.id != article.user_id or !user.is_admin
-    return "Get off 'muh lawn"
+    return "Get off 'muh lawn..."
   end
 
   article.destroy
 
   redirect to('/')
+end
+
+get '/edit_article/:article_id' do
+  if session[:user_name].nil?
+    return "Get off 'muh lawn..."
+  end
+
+  @user = User.find_by_user_name(session[:user_name])
+
+  @article = Article.find(params[:article_id])
+
+  if @user.id != @article.user_id
+    return "Get off 'muh lawn..."
+  end
+
+  @categories = Category.all.to_a
+
+  haml :edit_article
+end
+
+post '/edit_article/' do
+  if session[:user_name].nil?
+    return "Get off 'muh lawn..."
+  end
+
+  user = User.find_by_user_name(session[:user_name])
+
+  article = Article.find(params[:article_id])
+
+  if user.id != article.user_id
+    return "Get off 'muh lawn..."
+  end
+
+  article.update({
+    title: Rack::Utils.escape_html(params[:title]),
+    content: Rack::Utils.escape_html(params[:content]),
+    category_id: params[:category]
+  })
+
+  redirect to("/article/#{article.id.to_s}")
 end
 
 get '/create_article/' do
