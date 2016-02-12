@@ -20,6 +20,33 @@ get '/' do
   haml :index
 end
 
+get '/search/' do
+  unless session[:user_name].nil?
+    @user = User.find_by_user_name(session[:user_name])
+  end
+  @categories = Category.all.to_a
+
+  @query = params[:query]
+  @category = params[:category]
+
+  if params[:category] == "all"
+    @articles = Article.where(
+      "title LIKE ? OR content LIKE ?",
+      "%#{@query}%",
+      "%#{@query}%",
+    ).to_a
+  else
+    @articles = Article.where(
+      "(title LIKE ? OR content LIKE ?) AND category_id = ?",
+      "%#{@query}%",
+      "%#{@query}%",
+      @category
+    ).to_a
+  end
+
+  haml :search
+end
+
 post '/toggle_rank/' do
   if session[:user_name].nil?
     return "Get off 'muh lawn..."
