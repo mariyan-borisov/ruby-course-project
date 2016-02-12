@@ -38,7 +38,7 @@
         = @viewed_user.is_admin ? "Admin" : "User"
         Registration Time:
         = @viewed_user.time.to_s
-        - if @user.is_admin
+        - if !@user.nil? and @user.is_admin
           %form{"method" => "post", "action" => "/toggle_rank/"}
             %input{"type" => "hidden", "name" => "user", "value" => @viewed_user.id}
             %input{"type" => "submit", "value" => (@viewed_user.is_admin ? "Demote" : "Promote")}
