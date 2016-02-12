@@ -50,3 +50,19 @@
         %div= "Category: " + (@article.category.nil? ? "None" : @article.category.name)
         %div= "Content: " + Maruku.new(@article.content).to_html
         %hr
+        %form{"method" => "post", "action" => "/post_comment/"}
+          %input{"type" => "hidden", "name" => "article_id", "value" => @article.id.to_s}
+          Comment:
+          %textarea{"name" => "content"}
+          %input{"type" => "submit", "value" => "Post"}
+        Comments:
+        %hr
+        - @comments.each do |comment|
+          %div.comment
+            User:
+            = comment.user.user_name
+            Time:
+            = comment.time.to_s
+            Content:
+            = comment.content
+            %hr
