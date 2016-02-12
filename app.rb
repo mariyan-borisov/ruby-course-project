@@ -172,6 +172,7 @@ get '/login/' do
 end
 
 post '/login/' do
+  @categories = Category.all.to_a
   unless session[:user_name].nil?
     return redirect to('/')
   end
@@ -199,6 +200,8 @@ get '/registration/' do
 end
 
 post '/registration/' do
+  @categories = Category.all.to_a
+
   @errors = []
   if !User.user_name_valid?(params[:user_name])
     @errors << 'User name is not valid'
