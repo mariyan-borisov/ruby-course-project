@@ -114,6 +114,28 @@ post '/delete_category/' do
   end
 end
 
+post '/delete_article/' do
+  if session[:user_name].nil?
+    return "Get off 'muh lawn..."
+  end
+
+  user = User.find_by_user_name(session[:user_name])
+
+  begin
+    article = Article.find(params[:article])
+  rescue
+    return "This article doesn't exist..."
+  end
+
+  if user.id != article.user_id or !user.is_admin
+    return "Get off 'muh lawn"
+  end
+
+  article.destroy
+
+  redirect to('/')
+end
+
 get '/create_article/' do
   unless session[:user_name].nil?
     @user = User.find_by_user_name(session[:user_name])
