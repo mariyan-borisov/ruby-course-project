@@ -31,14 +31,22 @@
               %option{"value" => category.id}= category.name
           %input{"type" => "submit", "value" => "Search"}
     %div#main
-      %div
-        Title:
-        = @article.title
-        Content:
-        = @article.content
-        Time:
-        = @article.time.to_s
-        CategoryID:
-        = @article.category_id
-        UserID:
-        = @article.user_id
+      %div.article
+        - if !@user.nil?
+          - if @user.id == @article.user_id
+            %form{"method" => "get", "action" => "/edit_article/" + @article.id.to_s}
+              %input{"type" => "submit", "value" => "Edit"}
+          - if @user.id == @article.user_id or @user.is_admin
+            %form{"method" => "post", "action" => "/delete_article/"}
+              %input{"type" => "hidden", "name" => "article", "value" => @article.id.to_s}
+              %input{"type" => "submit", "value" => "Delete"}
+        %div
+          Title:
+          %a{"href" => "/article/" + @article.id.to_s}= @article.title
+        %div
+          Author:
+          %a{"href" => "/user/" + @article.user.user_name}= @article.user.user_name
+        %div= "Created: " + @article.time.to_s
+        %div= "Category: " + (@article.category.nil? ? "None" : @article.category.name)
+        %div= "Content: " + Maruku.new(@article.content).to_html
+        %hr
