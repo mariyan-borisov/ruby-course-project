@@ -1,3 +1,46 @@
+get '/recover/:token' do
+  @token_parameter = params[:token]
+  token = ForgottenPasswordToken.find_by_token(@token_parameter)
+  if token.nil?
+    return 'No such token'
+  end
+
+  haml :recover
+end
+
+post '/recover/' do
+  token = ForgottenPasswordToken.find_by_token(params[:token])
+  if token.nil?
+    return 'No such token'
+  end
+
+  token.user.update({password_hash: BCrypt::Password.create(params[:password])})
+
+  token.destroy
+
+  'The password was changed...'
+end
+
+get '/forgotten_password/' do
+  haml :forgotten_password
+end
+
+post '/forgotten_password/' do
+  user = User.find_by_email(params[:email])
+  if user.nil?
+    return 'No such user'
+  end
+  
+  token = ForgottenPasswordToken.new
+  token.user = user
+  token.token = UUIDTools::UUID.random_create.to_s
+  token.save
+
+  Pony.mail(to: user.email, from: 'ruby-course-project@abv.bg', subject: 'Password recovery')
+
+  'Token was sent to your email...'
+end
+
 post '/toggle_rank/' do
   if session[:user_name].nil?
     return "Get off 'muh lawn..."
@@ -73,6 +116,9 @@ post '/registration/' do
   if params[:first_password] != params[:second_password]
     @errors << "Passwords don't match"
   end
+  if params[:email].match(/^[^@]+@[^.]+\.[a-z]+$/).nil?
+    @errors << "Invalid email"
+  end
 
   return haml :registration unless @errors.empty?
 
@@ -81,7 +127,7 @@ post '/registration/' do
     is_admin = true
   end
 
-  User.register(params[:user_name], params[:first_password], is_admin)
+  User.register(params[:user_name], params[:email], params[:first_password], is_admin)
 
   redirect to('/')
 end

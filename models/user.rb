@@ -18,9 +18,10 @@ class User < ActiveRecord::Base
     !find_by_user_name(user_name).nil?
   end
 
-  def self.register(user_name, password, is_admin = false)
+  def self.register(user_name, email, password, is_admin = false)
     user = new
     user.user_name = user_name
+    user.email = email
     user.password_hash = BCrypt::Password.create(password)
     user.time = Time.now
     user.is_admin = is_admin
