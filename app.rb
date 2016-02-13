@@ -3,6 +3,8 @@ require 'sinatra/activerecord'
 require 'tilt/haml'
 require 'rack/utils'
 require 'maruku'
+require 'uuidtools'
+require 'pony'
 
 enable :sessions
 
@@ -10,6 +12,7 @@ require_relative 'models/user'
 require_relative 'models/article'
 require_relative 'models/category'
 require_relative 'models/comment'
+require_relative 'models/forgotten_password_token'
 
 require_relative 'routes/users'
 require_relative 'routes/articles'

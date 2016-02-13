@@ -32,8 +32,13 @@
           %input{"type" => "submit", "value" => "Search"}
     %div#main
       %form{"method" => "post", "action" => "/registration/"}
+        User Name:
         %input{"type" => "text", "name" => "user_name"}
+        Email:
+        %input{"type" => "text", "name" => "email"}
+        Password:
         %input{"type" => "password", "name" => "first_password"}
+        Repeat Password:
         %input{"type" => "password", "name" => "second_password"}
         %input{"type" => "submit", "value" => "Register"}
         - if !@errors.nil? and !@errors.empty?

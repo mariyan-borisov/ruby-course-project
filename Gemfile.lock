@@ -20,11 +20,17 @@ GEM
       tilt
     i18n (0.7.0)
     json (1.8.3)
+    mail (2.6.3)
+      mime-types (>= 1.16, < 3)
     maruku (0.7.2)
+    mime-types (2.99)
     minitest (5.8.4)
+    pony (1.11)
+      mail (>= 2.0)
     rack (1.6.4)
     rack-protection (1.5.3)
       rack
+    rake (10.5.0)
     sinatra (1.4.7)
       rack (~> 1.5)
       rack-protection (~> 1.4)
@@ -37,6 +43,7 @@ GEM
     tilt (2.0.2)
     tzinfo (1.2.2)
       thread_safe (~> 0.1)
+    uuidtools (2.1.5)
 
 PLATFORMS
   ruby
@@ -46,9 +53,12 @@ DEPENDENCIES
   bcrypt
   haml
   maruku
+  pony
+  rake
   sinatra
   sinatra-activerecord
   sqlite3
+  uuidtools
 
 BUNDLED WITH
    1.11.2
